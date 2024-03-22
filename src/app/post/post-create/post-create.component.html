@@ -1,0 +1,121 @@
+<!-- 
+    Property Binding:
+    
+    Property binding in Angular helps you set values for properties of HTML elements or directives. 
+-->
+
+<!-- <textarea rows="10" [value]="newPost" #postArea></textarea>
+<br>
+<button (click)="onAddPost(postArea)">Click</button>
+<hr>
+<p>{{newPost}}</p> -->
+
+<!-- ===================================================== -->
+
+
+<!-- 
+    Two Binding Element:
+
+    The two-way data binding in Angular is used to display information to the end user and 
+	allows the end user to make changes to the underlying data using the UI.
+-->
+
+<!-- <textarea rows="10" [(ngModel)]="postTextArea"></textarea>
+<h1>{{postTextArea}}</h1>
+<br>
+<button (click)="onAddPost()">Click</button>
+<hr>
+
+<p>{{newPost}}</p> -->
+
+<!-- ===================================================== -->
+
+<!-- Using Angular Material -->
+
+<!-- Template Driven Approach: A template-driven form is the simplest way to build a form in Angular. -->
+
+<!-- <mat-card>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
+        <mat-form-field>
+            <input 
+                matInput 
+                type="text" 
+                name="title"
+                [ngModel]="post?.title"
+                placeholder="Post Title"
+                required
+                #title="ngModel">
+            <mat-error *ngIf="title.invalid">Please enter the Title</mat-error>
+        </mat-form-field>
+        <div>
+            <button mat-stroked-button (click)="filePicker.click()" type="button">FilePicker</button>
+            <input type="file" #filePicker>
+        </div>
+        <mat-form-field>
+            <textarea 
+                matInput 
+                rows="4" 
+                name="content"
+                [ngModel]="post?.content"
+                placeholder="Post Content"
+                required   
+                #content="ngModel"></textarea>
+            <mat-error *ngIf="content.invalid">Please enter the Content</mat-error>
+
+        </mat-form-field>
+
+    
+        <button mat-raised-button
+                color="accent" 
+                type="submit">Save Post</button>
+    </form>   
+</mat-card> -->
+
+<!-- --------------------------------------------------------------------------- -->
+
+<!-- Reactive Driven Approach: Reactive forms provide a model-driven approach to handling form inputs whose values change over time  -->
+
+<mat-card>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <form [formGroup]="form"(submit)="onSavePost()" *ngIf="!isLoading">
+        <mat-form-field>
+            <input 
+                matInput 
+                type="text" 
+                name="title"
+                formControlName="title"
+                placeholder="Please enter the Title"
+                >
+            <mat-error *ngIf="form.get('title').invalid">Please enter the Title</mat-error>
+        </mat-form-field>
+
+        <div>
+            <button mat-stroked-button (click)="filePicker.click()" type="button">FilePicker</button>
+            <input type="file" #filePicker (change)="onImgPicker($event)">
+        </div>
+
+        <div class="image-preview" *ngIf="imagePreview!=='' && imagePreview && form.get('image').valid">
+            <img [src]="imagePreview" [alt]="form.value.title">
+        </div>
+
+        <mat-form-field>
+            <textarea 
+                matInput 
+                rows="4" 
+                name="content"
+                formControlName="content"
+                placeholder="Please enter the Content"
+                ></textarea>
+            <mat-error *ngIf="form.get('content').invalid">Please enter the Content</mat-error>
+
+        </mat-form-field>
+    
+        <button mat-raised-button
+                color="accent" 
+                type="submit">Save Post</button>
+    </form>   
+</mat-card>
+
+
+

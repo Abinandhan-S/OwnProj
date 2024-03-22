@@ -1,0 +1,31 @@
+import { NgModule } from '@angular/core';
+import { Route, RouterModule, Routes } from '@angular/router';
+import { PostListComponent } from './post/post-list/post-list.component';
+import { PostCreateComponent } from './post/post-create/post-create.component';
+
+
+const routes:Routes=[
+    {
+        path:'', 
+        component:PostListComponent
+    },
+    {
+        path:'create', 
+        component:PostCreateComponent
+    },
+    {
+        path:'edit/:postId', 
+        component:PostCreateComponent
+    }
+]
+
+@NgModule({
+    declarations: [],
+    imports: [RouterModule.forRoot(routes) ],
+    exports: [RouterModule],
+    providers: [],
+})
+
+export class AppRoutingModule{
+
+}

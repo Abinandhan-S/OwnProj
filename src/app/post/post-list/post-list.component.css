@@ -1,0 +1,13 @@
+:host{
+    display: block;
+    margin-top:1rem ;
+}
+
+.para-content{
+    text-align: center;
+}
+
+mat-spinner{
+    margin: auto;
+
+}
