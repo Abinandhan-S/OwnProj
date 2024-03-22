@@ -7,7 +7,10 @@
       "default",
       {
         "ignore": [
-          "width: fit-content"
+          "width: fit-content",
+          "-webkit-tap-highlight-color",
+          "-ms-text-size-adjust",
+          "-webkit-font-feature-settings"
         ]
       }
     ],
