@@ -48,7 +48,8 @@ export class PostsService {
         return {
           title:post.title,
           content:post.content,
-          id:post._id
+          id:post._id,
+          imagePath:post.imagePath
         }
       })
     }
@@ -66,7 +67,11 @@ export class PostsService {
   getEditPost(EditPostId:string){
     // return {...this.posts.find(p=>p.id===EditPostId)}
 
-    return this.http.get<{_id:string, title:string, content:string}>("http://localhost:3000/api/posts/"+EditPostId)
+    return this.http.get<{
+      _id:string, 
+      title:string, 
+      content:string}>
+      ("http://localhost:3000/api/posts/"+EditPostId)
 
   }
 
@@ -91,7 +96,7 @@ export class PostsService {
     addPostData.append('image',image,title)
     this.http.post<{
                     message:string,
-                    createdPostId:string
+                    postOfData:postModel
                   }>(
                     ("http://localhost:3000/api/posts/"),
                     // addedPost
@@ -101,9 +106,10 @@ export class PostsService {
 
     console.log(responseData.message);
     const addedPost:postModel=({
-      id:responseData.createdPostId,
+      id:responseData.postOfData.id,
       title:title,
-      content:content
+      content:content,
+      imagePath:responseData.postOfData.imagePath
     })
 
     // addedPost.id= responseData.createdPostId
@@ -120,7 +126,8 @@ export class PostsService {
    const editedPost:postModel={
         id:updatePostId,
         title:updatePostTitle,
-        content:updatePostContent
+        content:updatePostContent,
+        imagePath:null
    }
   //  console.log("Edited the post successfully!");
    

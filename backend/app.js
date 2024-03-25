@@ -34,6 +34,7 @@ const bodyParser= require('body-parser')
 
 const app = express()
 
+const path = require('path')
  
 // Mongoose is a JavaScript object-oriented programming library that creates a connection between MongoDB and the Node.js JavaScript runtime environment.
 // Mongoose is a better fit for applications that demand a consistent data model, extensive data validation, and a more organized data management approach.
@@ -60,6 +61,8 @@ mongoose
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
+
+app.use('/images',express.static(path.join('backend/images')))
 
 app.use((req, res, next)=>{
     res.setHeader(

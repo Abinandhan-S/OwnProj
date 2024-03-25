@@ -13,7 +13,7 @@ const MIME_TYPE_MAP={
 const storage= multer.diskStorage({
     destination:(req, file, callback)=>{
         const isValid = MIME_TYPE_MAP[file.mimetype]
-        let error = new Error("Invalid MimneTyep")
+        let error = new Error("Invalid MimneType!")
         if(isValid){
             error=null
         }
@@ -28,10 +28,12 @@ const storage= multer.diskStorage({
 
     // This middleware is using for store the data to mongoDB
     router.post('',multer({storage:storage}).single("image"),(req, res, next)=>{
+        const url = req.protocol+"://"+req.get('host')
         const reqBodyPost=new PostMongooseModel({
             
             title:req.body.title,
-            content:req.body.content
+            content:req.body.content,
+            imagePath: url+"/images/"+req.file.filename
         })
 
         // .save() using to store data in database
@@ -39,7 +41,14 @@ const storage= multer.diskStorage({
         .then(createdPost=>{
             res.status(201).json({
                 message:"Post Stored successfully into the Server",
-                createdPostId:createdPost._id
+                // createdPostId:createdPost._id
+                postOfData:{
+                    ...createdPost,
+                    id:createdPost._id,
+                    // title:createdPost.title,
+                    // content:createdPost.content,
+                    // imagePath:createdPost.imagePath
+                }
             })
         })
         console.log(reqBodyPost);
