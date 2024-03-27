@@ -24,7 +24,7 @@ export class PostsService {
 
     // return [...this.posts];
     // return this.posts;
-    console.log("getPosts is called");
+    console.log("getPosts() is called!");
     
     this.http.get<{
                     message:string,
@@ -32,11 +32,11 @@ export class PostsService {
                   }>
                   ('http://localhost:3000/api/posts/')
       
-// .subscribe((postsData)=>{
-//   console.log(postsData.message)
-//   this.posts=postsData.post;
-//   this.postUpdated.next([...this.posts])
-// })
+    // .subscribe((postsData)=>{
+    //   console.log(postsData.message)
+    //   this.posts=postsData.post;
+    //   this.postUpdated.next([...this.posts])
+    // })
 
     // .pipe() method is using for accept adding multiple operator 
     //  "import { map } from 'rxjs/operators'"
@@ -55,8 +55,8 @@ export class PostsService {
     }
     ))
 
-//The subscribe() method calls the observable's function that produces and emits data. 
-// Thus, subscribing to an observable starts a flow of data between the observable and the observer. 
+    //The subscribe() method calls the observable's function that produces and emits data. 
+    // Thus, subscribing to an observable starts a flow of data between the observable and the observer. 
     .subscribe(trnsformdata=>{
       this.posts=trnsformdata;
       this.postUpdated.next([...this.posts])
@@ -70,7 +70,8 @@ export class PostsService {
     return this.http.get<{
       _id:string, 
       title:string, 
-      content:string}>
+      content:string,
+      imagePath:string}>
       ("http://localhost:3000/api/posts/"+EditPostId)
 
   }
@@ -79,7 +80,7 @@ export class PostsService {
   getUpdatePost(){
     // Creates a new Observable with this Subject as the source. 
     // You can do this to create custom Observer-side logic of the Subject and conceal it from code that uses the Observable.
-    console.log("getUpdatePost funtion is called!");
+    console.log("getUpdatePost() is called!");
     return this.postUpdated.asObservable()
   }
 
@@ -94,6 +95,8 @@ export class PostsService {
     addPostData.append('title',title)
     addPostData.append('content',content)
     addPostData.append('image',image,title)
+    console.log(addPostData);
+    
     this.http.post<{
                     message:string,
                     postOfData:postModel
@@ -121,15 +124,33 @@ export class PostsService {
 
   }
 
-  updatePost(updatePostId:string, updatePostTitle:string, updatePostContent:string){
+  updatePost(updatePostId:string, updatePostTitle:string, updatePostContent:string, updatePostImage:File|string){
 
-   const editedPost:postModel={
-        id:updatePostId,
-        title:updatePostTitle,
-        content:updatePostContent,
-        imagePath:null
-   }
-  //  console.log("Edited the post successfully!");
+  //  const editedPost:postModel={
+  //       id:updatePostId,
+  //       title:updatePostTitle,
+  //       content:updatePostContent,
+  //       imagePath:null
+  //  }
+
+  let editedPost:postModel|FormData
+    if(typeof(updatePostImage)=='object'){
+      editedPost=new FormData()
+      editedPost.append('id',updatePostId),
+      editedPost.append('title',updatePostTitle),
+      editedPost.append('content', updatePostContent),
+      editedPost.append('image',updatePostImage,updatePostTitle)
+    }
+
+    else{
+        editedPost={
+            id:updatePostId,
+            title:updatePostTitle,
+            content:updatePostContent,
+            imagePath:updatePostImage
+         }
+    }
+
    
    this.http.put("http://localhost:3000/api/posts/"+updatePostId, editedPost)
    .subscribe(response=>{
@@ -137,14 +158,23 @@ export class PostsService {
     const updatePostsData =[...this.posts]
     console.log(updatePostsData);
     
-    const oldPostIndex = updatePostsData.findIndex(p=>p.id===editedPost.id)
+    const oldPostIndex = updatePostsData.findIndex(p=>p.id===updatePostId)
     console.log(oldPostIndex);
+    const editedPost={
+      id:updatePostId,
+      title:updatePostTitle,
+      content:updatePostContent,
+      imagePath:""
+   }
+
     updatePostsData[oldPostIndex]==editedPost
     this.posts=updatePostsData
     this.postUpdated.next([...this.posts])
     this.router.navigate(['/'])
     }
   )
+  console.log("Edited the post successfully!");
+
   }
 
 

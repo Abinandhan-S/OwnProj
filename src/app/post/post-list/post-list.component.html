@@ -1,5 +1,6 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
-<mat-accordion *ngIf ="postsList.length>0 && !isLoading" multi="true">
+<!-- <mat-accordion *ngIf ="postsList.length>0 && !isLoading" multi="true"> -->
+<mat-accordion *ngIf ="postsList.length>0 && !isLoading" multi="false">
     <mat-expansion-panel *ngFor="let postListDisplay of postsList">
         
         <mat-expansion-panel-header>

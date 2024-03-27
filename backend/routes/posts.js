@@ -9,7 +9,7 @@ const MIME_TYPE_MAP={
     'image/jpeg':'jpg',
     'image/jpg':'jpg'
 }
-
+// syntax:var storage = multer. diskStorage({ destination: function(req, file, cb) { cb(null, './uploads'); }, filename: function (req, file, cb) { cb(null , file. originalname); } })
 const storage= multer.diskStorage({
     destination:(req, file, callback)=>{
         const isValid = MIME_TYPE_MAP[file.mimetype]
@@ -43,11 +43,11 @@ const storage= multer.diskStorage({
                 message:"Post Stored successfully into the Server",
                 // createdPostId:createdPost._id
                 postOfData:{
-                    ...createdPost,
+                    // ...createdPost,
                     id:createdPost._id,
-                    // title:createdPost.title,
-                    // content:createdPost.content,
-                    // imagePath:createdPost.imagePath
+                    title:createdPost.title,
+                    content:createdPost.content,
+                    imagePath:createdPost.imagePath
                 }
             })
         })
@@ -58,26 +58,34 @@ const storage= multer.diskStorage({
 
 
     // This middleware is using for Edit the data in mongoDB
-    router.put('/:id',(req, res, next)=>{
-
-        const postEditData= new PostMongooseModel({
-            _id:req.body.id,
-            title:req.body.title,
-            content:req.body.content
-        })
-    
-        PostMongooseModel.updateOne(
-            {_id:req.params.id}, 
-            postEditData
-        ).then(result=>{
-            //  console.log(result);
-            res.status(200).json(
-                {
-                message:'Updated Successfully!'
-                }
-            )
-        })
-    })
+    router.put('/:id',multer({storage:storage}).single("image"),
+        
+        (req, res, next)=>{
+            let editImagePath
+            if(req.file){
+                const url = req.protocol+"://"+req.get('host')
+                editImagePath =url+"/images/"+req.file.filename
+            }
+            const postEditData= new PostMongooseModel({
+                _id:req.body.id,
+                title:req.body.title,
+                content:req.body.content,
+                imagePath:editImagePath
+            })
+        
+            PostMongooseModel.updateOne(
+                {_id:req.params.id}, 
+                postEditData
+            ).then(result=>{
+                //  console.log(result);
+                res.status(200).json(
+                    {
+                    message:'Updated Successfully!'
+                    }
+                )
+            })
+        }
+    )
 
     
     // This middleware is using for Fetching the data for Edit in mongoDB
