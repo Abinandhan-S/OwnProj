@@ -62,6 +62,7 @@ const storage= multer.diskStorage({
         
         (req, res, next)=>{
             let editImagePath
+            console.log(typeof(req.file));
             if(req.file){
                 const url = req.protocol+"://"+req.get('host')
                 editImagePath =url+"/images/"+req.file.filename
@@ -77,10 +78,10 @@ const storage= multer.diskStorage({
                 {_id:req.params.id}, 
                 postEditData
             ).then(result=>{
-                //  console.log(result);
+                // console.log(result);
                 res.status(200).json(
                     {
-                    message:'Updated Successfully!'
+                    message:'Updated Successfully!',
                     }
                 )
             })
@@ -94,6 +95,7 @@ const storage= multer.diskStorage({
         PostMongooseModel.findById(req.params.id)
         .then(post=>{
             if(post){
+                console.log(post);
                 res.status(200).json(post)
             }
             else{

@@ -46,7 +46,7 @@ export class PostListComponent implements OnInit,OnDestroy {
 
    ngOnDestroy(): void {
      this.postSubcrib.unsubscribe()
-     console.log("destroyer called");
+     console.log("ngOnDestroy() is called!");
      
    }
 

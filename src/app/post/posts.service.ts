@@ -110,8 +110,8 @@ export class PostsService {
     console.log(responseData.message);
     const addedPost:postModel=({
       id:responseData.postOfData.id,
-      title:title,
-      content:content,
+      title:responseData.postOfData.title,
+      content:responseData.postOfData.content,
       imagePath:responseData.postOfData.imagePath
     })
 
@@ -166,7 +166,8 @@ export class PostsService {
       content:updatePostContent,
       imagePath:""
    }
-
+   
+   
     updatePostsData[oldPostIndex]==editedPost
     this.posts=updatePostsData
     this.postUpdated.next([...this.posts])

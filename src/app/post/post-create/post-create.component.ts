@@ -63,6 +63,8 @@ export class PostCreateComponent implements OnInit {
                 content:this.post.content,
                 image:this.post.imagePath
               })
+              console.log(this.form);
+              
             }
         )}
         else{
@@ -114,14 +116,14 @@ export class PostCreateComponent implements OnInit {
     )
   }
   else{
-
-    console.log("Post Edit updated successfully!");
+    
     this.postService.updatePost(
       this.postId,
       this.form.value.title,
       this.form.value.content,
       this.form.value.image)
   }
+    // console.log("Post Edited successfully!");
     this.form.reset()
     this.isLoading=false
   }
